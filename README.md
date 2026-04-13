@@ -53,6 +53,73 @@ Detailed documentation:
 - [`methodology.md`](prediction-market-analytics/methodology.md) — Signal extraction framework and calibration methodology
 - [`sample-analyses.sql`](prediction-market-analytics/sample-analyses.sql) — Analytical queries against the market database
 
+### `grant-management-system/`
+
+**A grant intelligence platform for a five-person team managing $16M+ in funding.**
+
+Originally developed by [David Williams](https://www.linkedin.com/in/williamsbdavid/). Included here as a reference implementation of config-driven ETL, multi-source data consolidation, and analytical SQL architecture — patterns that directly informed the prediction market analytics platform above.
+
+The system consolidates grant data from four sources — Google Sheets task tracking, a Bloomerang CRM, 23,000+ documents on a shared drive, and IRS 990 filings — into a single SQLite database with full-text search, geospatial queries, and analytical views.
+
+#### Architecture highlights
+
+- **Two-tier fact table pattern** — A header row links to child tables (titles, statuses, dates, amounts, programs, notes), so different source shapes coexist without nullable columns or schema changes per source
+- **SQL views as structural contracts** — All multi-table reads go through views. A Python `ViewTable` class fuses the typed dataclass and SQL metadata into one declaration, catching column mismatches at construction time
+- **Config-driven ETL** — `FetchDispatcher` resolves route keys to API calls via database config. `SnapshotHasher` deduplicates via SHA-256 content hashing. `TransformCoordinator` decomposes JSON snapshots into normalized facts in a single transaction
+- **SpatiaLite geospatial queries** — Service site addresses geocoded and matched against funder territory boundaries
+- **FTS5 full-text search** — Porter stemming across 23,000+ extracted documents
+
+**Stack:** Python 3.12, Flask, SQLite (WAL mode), SpatiaLite, Jinja2, Alpine.js, Plotly, Leaflet
+
+Detailed documentation:
+- [`architecture.md`](grant-management-system/architecture.md) — System design, data model, query DSL, and design decisions
+- [`etl-pipeline-overview.md`](grant-management-system/etl-pipeline-overview.md) — How data flows from raw sources to structured, searchable records
+- [`sample-queries.sql`](grant-management-system/sample-queries.sql) — Analytical queries against the database
+
+### Happy to Have Lived
+
+**A goal-planning app that starts with what matters, not what's due.**
+
+Originally developed by [David Williams](https://www.linkedin.com/in/williamsbdavid/). A values-first goal-tracking system built in Swift — the user begins with what they value, then defines goals, sets time-boxed terms, and records actions (including Apple Health imports). The Reflect tab shows whether what you're doing aligns with what you care about.
+
+#### Screenshots
+
+| Facilitated Start | Now | Plan | Reflect |
+|:-:|:-:|:-:|:-:|
+| ![Onboarding](happy-to-have-lived/screenshots/01-facilitated-start.png) | ![Daily view](happy-to-have-lived/screenshots/02-now.png) | ![Planning](happy-to-have-lived/screenshots/03-plan.png) | ![Reflection](happy-to-have-lived/screenshots/04-reflect.png) |
+
+| Values | Record |
+|:-:|:-:|
+| ![Values entry](happy-to-have-lived/screenshots/05-values.png) | ![Actions + Health](happy-to-have-lived/screenshots/06-record.png) |
+
+Three-layer Swift Package Manager structure with normalized SQLite models (via GRDB), a centralized `@Observable` DataStore, and on-device language generation via Apple Intelligence.
+
+**Stack:** Swift 6.2, SwiftUI, GRDB, SQLite, HealthKit, Apple Intelligence (Foundation Models), AppIntents
+
+TestFlight: https://testflight.apple.com/join/rrpQRxYJ
+
+### RunningBehind
+
+**A departure calculator for people who lose track of time.**
+
+Originally developed by [David Williams](https://www.linkedin.com/in/williamsbdavid/). The app continuously recalculates the pace needed to arrive on time, translating a countdown into something concrete and embodied — when the required pace shifts from "easy stroll" to "brisk walk" to "you'd better run," that's legible in a way a ticking number isn't.
+
+#### Screenshots
+
+| Departure | Destination | Modes | Modality Editor |
+|:-:|:-:|:-:|:-:|
+| ![Departure screen](running-behind/screenshots/01-departure.png) | ![Destination detail](running-behind/screenshots/04-destination-detail.png) | ![Travel modes](running-behind/screenshots/02-modes.png) | ![Custom modality](running-behind/screenshots/03-modality-editor.png) |
+
+| Relaxed | Time passing | Running late | Journey in progress |
+|:-:|:-:|:-:|:-:|
+| ![Relaxed](running-behind/screenshots/05-relaxed-calculation.png) | ![Urgency rising](running-behind/screenshots/06-urgency-rising.png) | ![Running late](running-behind/screenshots/07-running-late.png) | ![Journey tracking](running-behind/screenshots/08-journey-in-progress.png) |
+
+Built primarily through AI-assisted development — Claude Code writing Swift while the developer focused on product decisions, scope discipline, and shipping.
+
+**Stack:** Swift 6.2, SwiftUI, GRDB, SQLite, MapKit, CoreLocation, EventKit, ActivityKit
+
+Read more: [`building-with-ai.md`](running-behind/building-with-ai.md) — prompting strategy, lessons learned, and the user story
+
 ### `theoretical-framework/`
 
 **The scientific foundation underlying prediction market research.**
@@ -83,8 +150,9 @@ Read more: [`perspectives.md`](theoretical-framework/perspectives.md) — Full t
 
 ## Technical Stack
 
-- **Languages:** Python, SQL
-- **Data:** SQLite, Pandas, NumPy, SciPy, ETL pipelines
+- **Languages:** Python, SQL, Swift
+- **Data:** SQLite, SpatiaLite, Pandas, NumPy, SciPy, ETL pipelines
+- **Frameworks:** Flask, SwiftUI, GRDB
 - **Visualization:** Plotly, matplotlib, seaborn, Jupyter
 - **APIs:** Kalshi, Polymarket, polling aggregators, economic data feeds
 - **AI/ML:** Claude Code (daily use), prompt engineering, probabilistic modeling
@@ -98,3 +166,7 @@ Berg Lab. Prediction market research grounded in computational social science, c
 The work rests on a simple observation: markets are made of minds. Every price is a belief, every trade is a decision, and every resolution is a learning event. Understanding the computational, cognitive, and social processes that produce beliefs — and the systematic ways they go wrong — is the foundation for forecasting well.
 
 The research perspective draws from social psychology, learning and memory, cognitive neuroscience, and the emergent mathematical properties of knowledge systems both human and artificial. The applied domain is prediction markets: Kalshi, Polymarket, and the broader forecasting ecosystem where these perspectives meet real stakes and measurable outcomes.
+
+## Acknowledgments
+
+The grant management system, Happy to Have Lived, and RunningBehind were originally developed by [David Williams](https://www.linkedin.com/in/williamsbdavid/). His portfolio architecture and documentation structure provided the foundation for this repository.

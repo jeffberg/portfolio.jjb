@@ -13,7 +13,7 @@
 -- resolves "yes" 70% of the time.
 
 SELECT
-    CAST(ROUND(cr.predicted_probability * 10) AS INTEGER) * 10
+    CAST(cr.predicted_probability * 10 AS INTEGER) * 10
         AS probability_bin,
     COUNT(*) AS forecast_count,
     AVG(cr.actual_outcome) AS actual_resolution_rate,
@@ -248,7 +248,7 @@ SELECT
     AVG(ABS(p_after_1h.yes_price - p_before.yes_price))
         AS mean_initial_reaction,
     AVG(ABS(p_after_24h.yes_price - p_after_1h.yes_price))
-        AS mean_24h_adjustment,
+        AS mean_1h_to_24h_movement,
     COUNT(*) AS event_count
 FROM signals s
 JOIN contract_signals cs ON cs.signal_id = s.id

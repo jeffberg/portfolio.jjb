@@ -239,25 +239,27 @@ External signals arrive on different timescales. Polling data might update weekl
 ```sql
 -- Align signals with market prices using temporal windows
 -- For each price observation, find the most recent signal value
+-- (SQLite-compatible correlated subquery approach)
 SELECT
     p.contract_id,
     p.timestamp AS price_time,
     p.yes_price,
-    s.value AS signal_value,
-    s.timestamp AS signal_time
+    (SELECT s.value FROM signals s
+     JOIN contract_signals cs ON cs.signal_id = s.id
+     WHERE cs.contract_id = p.contract_id
+       AND s.timestamp <= p.timestamp
+     ORDER BY s.timestamp DESC
+     LIMIT 1) AS signal_value,
+    (SELECT s.timestamp FROM signals s
+     JOIN contract_signals cs ON cs.signal_id = s.id
+     WHERE cs.contract_id = p.contract_id
+       AND s.timestamp <= p.timestamp
+     ORDER BY s.timestamp DESC
+     LIMIT 1) AS signal_time
 FROM prices p
-LEFT JOIN LATERAL (
-    SELECT value, timestamp
-    FROM signals s
-    JOIN contract_signals cs ON cs.signal_id = s.id
-    WHERE cs.contract_id = p.contract_id
-      AND s.timestamp <= p.timestamp
-    ORDER BY s.timestamp DESC
-    LIMIT 1
-) s ON TRUE
 ```
 
-In practice, the alignment uses SQLite-compatible correlated subqueries with time-window bucketing, since SQLite lacks `LATERAL` joins.
+Time-window bucketing supplements point-in-time alignment for sparse signals (e.g., weekly polls aligned against daily prices).
 
 ## Calibration Engine
 

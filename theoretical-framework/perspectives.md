@@ -22,7 +22,7 @@ Social psychology is not one variable among many — it is the mediating and mod
 
 **Separate-but-equal association structures.** The tripartite model of attitudes (affective, behavioral, cognitive) implies that a forecaster's relationship to a proposition has three semi-independent channels:
 
-1. **Affective-emotional** — How you *feel* about the outcome. Do you want it to happen? Are you afraid of it? Affect biases probability estimates in predictable ways: desired outcomes are overestimated, feared outcomes are either over- or under-estimated depending on coping style.
+1. **Affective-emotional** — How you *feel* about the outcome. Do you want it to happen? Are you afraid of it? Affect biases probability estimates in predictable ways: desired outcomes are overestimated (wishful thinking), and feared outcomes are overestimated by vigilant copers (anxious overweighting of threat) but underestimated by avoidant copers (defensive denial of threat).
 
 2. **Behavioral-instrumental** — What you're *willing to do*. Position sizing, timing of entry and exit, and willingness to average into a losing position all express the behavioral component of the attitude, which may diverge from the stated cognitive estimate.
 
@@ -145,7 +145,7 @@ The four perspectives converge on a single construct: **attitude** — defined g
 
 In prediction markets, every position is an attitude. The comprehensive attitude profile includes:
 
-| Dimension | Definition | Market Manifestation |
+| Attitude Dimension | Definition | Market Manifestation |
 |-----------|-----------|---------------------|
 | Activity | Degree of active engagement | Trading frequency, market monitoring |
 | Ambivalence | Coexistence of positive and negative evaluations | Hedged positions, frequent position changes |
